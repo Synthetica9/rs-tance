@@ -97,7 +97,7 @@ fn digits(x: LargeInt) -> Vec<SmallInt> {
         vec.push(large_to_small(quot));
     }
     vec.reverse();
-    return vec;
+    vec
 }
 
 fn digit_product(x: LargeInt) -> LargeInt {
@@ -105,7 +105,7 @@ fn digit_product(x: LargeInt) -> LargeInt {
     for digit in digits(x) {
         result *= small_to_large(digit);
     }
-    return result;
+    result
 }
 
 fn resistance(x: &LargeInt) -> Resistance {
@@ -116,8 +116,7 @@ fn resistance(x: &LargeInt) -> Resistance {
         remaining = digit_product(remaining);
         res += 1;
     }
-
-    return res;
+    res
 }
 
 fn factor(x: SmallInt) -> Bins {
