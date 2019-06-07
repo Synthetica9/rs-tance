@@ -5,9 +5,9 @@ rust:
   - nightly
 before_install:
   # Install rg
-  - https://gist.githubusercontent.com/cyio/e101597bfbfff6369fa601c2b6456e81/raw/1b2f20784f040687c24a59958efb551394ffa0c5/install-ripgrep-on-ubuntu.sh | sudo bash
+  - curl https://gist.githubusercontent.com/cyio/e101597bfbfff6369fa601c2b6456e81/raw/1b2f20784f040687c24a59958efb551394ffa0c5/install-ripgrep-on-ubuntu.sh | sudo bash
 before_script:
   - rustup component add clippy
 script:
   - cargo clippy
-  - cargo run --release 50 | rg --passthru? 277777788888899
+  - cargo run --release 50 | rg --passthru 277777788888899
