@@ -50,7 +50,7 @@ impl StarsBars {
 }
 
 impl Iterator for StarsBars {
-    type Item = Vec<usize>;
+    type Item = Bins;
 
     fn next(&mut self) -> Option<Bins> {
         if self.finished {
@@ -59,22 +59,31 @@ impl Iterator for StarsBars {
             let old_bins = self.bins.clone();
             let mut broken = false;
             for (i, val) in self.bins[..self.bins.len() - 1].iter().enumerate() {
+                // In the first non-zero bin:
                 if *val != 0 {
+                    // Push right by one:
                     self.bins[i + 1] += 1;
                     self.bins[i] -= 1;
+
+                    // Collect the rest of the values in the first bin:
                     let mut sum = 0;
                     for j in 0..=i {
                         sum += self.bins[j];
                         self.bins[j] = 0;
                     }
                     self.bins[0] = sum;
+
+                    // Rust does not have an `else` on loops, so we break.
                     broken = true;
                     break;
                 }
             }
-            if !broken {
-                self.finished = true;
-            }
+
+            // If we haven't broken, we have pushed all values to the rightmost
+            // bin. This means we are finished.
+            self.finished = !broken;
+
+            // Return the value we saved at the start. RUST, Y U NO HAVE GENERATOR ITERATORS :(
             Some(old_bins)
         }
     }
