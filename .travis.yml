@@ -5,7 +5,7 @@ rust:
   - nightly
 before_install:
   # Install rg
-  - curl https://gist.github.com/cyio/e101597bfbfff6369fa601c2b6456e81 | sudo bash
+  - https://gist.githubusercontent.com/cyio/e101597bfbfff6369fa601c2b6456e81/raw/1b2f20784f040687c24a59958efb551394ffa0c5/install-ripgrep-on-ubuntu.sh | sudo bash
 before_script:
   - rustup component add clippy
 script:
