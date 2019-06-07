@@ -108,7 +108,7 @@ fn digit_product(x: LargeInt) -> LargeInt {
     return result;
 }
 
-fn resistance(x: LargeInt) -> Resistance {
+fn resistance(x: &LargeInt) -> Resistance {
     let mut res = 0;
     let mut remaining = x.clone();
 
@@ -158,14 +158,6 @@ fn assemble(xs: &Bins) -> LargeInt {
     result
 }
 
-fn can_be_made(x: LargeInt) -> bool {
-    let mut remaining = x.clone();
-    for p in PRIMES.iter() {
-        remaining.remove_factor_mut(&small_to_large(*p));
-    }
-    return remaining == 1;
-}
-
 fn main() {
     println!("Starting");
 
@@ -195,11 +187,11 @@ fn main() {
     };
 
     let mut n = 1;
-    'outer: loop {
+    'outer: while n < break_on {
         for bins in StarsBars::from(n) {
             iterations += 1;
 
-            // Like the 5 and 2 example, will get canceld out quickly, so skip immediately.
+            // Like the 5 and 2 example, will get canceled out quickly, so skip immediately.
             // Achieves a huge speedup, ~4x
             if divides(&bins, &BASE_FACTORS) {
                 discriminations += 1;
@@ -211,14 +203,11 @@ fn main() {
                 a *= small_to_large(*base).pow(*exponent as u32);
             }
 
-            let res = resistance(a) + 1; // One pass is done above.
+            let res = resistance(&a) + 1; // One pass is done above.
             if res >= max_res {
                 let assembled = assemble(&bins);
                 let native_assembled = assembled.to_string_radix(BASE as i32);
 
-                if can_be_made(assembled.clone()) {
-                    println!("Promising: {}", assembled);
-                }
                 if res > max_res {
                     println!("Found new max!          {}\t{} ({})", res, native_assembled, assembled);
                     max_res = res;
@@ -230,12 +219,9 @@ fn main() {
 
             }
             if !running.load(Ordering::SeqCst) {
+                println!("Investigating before break: {}", a);
                 break 'outer;
             };
-        }
-        // break if we're no longer running
-        if n == break_on {
-            break 'outer;
         }
         n += 1;
     }
