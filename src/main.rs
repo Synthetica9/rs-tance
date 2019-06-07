@@ -84,7 +84,7 @@ lazy_static! {
   static ref PRIMES : Vec<SmallInt> = PrimeSet::new()
     .iter()
     .map(|i| i as SmallInt)
-    .take_while(|i| i <= BASE)
+    .take_while(|i| i <= &BASE)
     .collect();
 }
 
