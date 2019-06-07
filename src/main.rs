@@ -63,7 +63,7 @@ impl Iterator for StarsBars {
                     self.bins[i + 1] += 1;
                     self.bins[i] -= 1;
                     let mut sum = 0;
-                    for j in 0..i + 1 {
+                    for j in 0..=i {
                         sum += self.bins[j];
                         self.bins[j] = 0;
                     }
@@ -84,7 +84,7 @@ lazy_static! {
   static ref PRIMES : Vec<SmallInt> = PrimeSet::new()
     .iter()
     .map(|i| i as SmallInt)
-    .take_while(|i| i <= &BASE)
+    .take_while(|i| i <= BASE)
     .collect();
 }
 
@@ -205,7 +205,7 @@ fn main() {
             let res = resistance(&a) + 1; // One pass is done above.
             if res >= max_res {
                 let assembled = assemble(&bins);
-                let native_assembled = assembled.to_string_radix(BASE as i32);
+                let native_assembled = assembled.to_string_radix(i32::from(BASE));
 
                 if res > max_res {
                     println!("Found new max!          {}\t{} ({})", res, native_assembled, assembled);
@@ -218,6 +218,7 @@ fn main() {
 
             }
             if !running.load(Ordering::SeqCst) {
+                println!();
                 println!("Investigating before break: {}", a);
                 break 'outer;
             };
