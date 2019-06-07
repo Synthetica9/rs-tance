@@ -66,12 +66,14 @@ impl Iterator for StarsBars {
                     self.bins[i] -= 1;
 
                     // Collect the rest of the values in the first bin:
-                    let mut sum = 0;
-                    for j in 0..=i {
-                        sum += self.bins[j];
-                        self.bins[j] = 0;
+                    self.bins[0] = {
+                        let mut sum = 0;
+                        for j in 0..=i {
+                            sum += self.bins[j];
+                            self.bins[j] = 0;
+                        }
+                        sum
                     }
-                    self.bins[0] = sum;
 
                     // Rust does not have an `else` on loops, so we break.
                     broken = true;
