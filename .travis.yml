@@ -9,4 +9,5 @@ before_script:
   - rustup component add clippy
 script:
   - cargo clippy
-  - cargo run --release 50 | rg --passthru 277777788888899
+  # Run for 50 cycles and check if we find the result we want:
+  - cargo run 50 | rg --passthru 277777788888899
