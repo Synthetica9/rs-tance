@@ -57,10 +57,8 @@ impl Iterator for StarsBars {
             None
         } else {
             let old_bins = self.bins.clone();
-            let mut broken = false;
-            for (i, val) in self.bins[..self.bins.len() - 1].iter().enumerate() {
-                // In the first non-zero bin:
-                if *val != 0 {
+            match self.bins[..self.bins.len() - 1].iter().position(|&x| x != 0) {
+                Some(i) => {
                     // Push right by one:
                     self.bins[i + 1] += 1;
                     self.bins[i] -= 1;
@@ -74,16 +72,11 @@ impl Iterator for StarsBars {
                         }
                         sum
                     }
-
-                    // Rust does not have an `else` on loops, so we break.
-                    broken = true;
-                    break;
+                }
+                None => {
+                    self.finished = true;
                 }
             }
-
-            // If we haven't broken, we have pushed all values to the rightmost
-            // bin. This means we are finished.
-            self.finished = !broken;
 
             // Return the value we saved at the start. RUST, Y U NO HAVE GENERATOR ITERATORS :(
             Some(old_bins)
